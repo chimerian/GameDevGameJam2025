@@ -1,7 +1,11 @@
+using Reflex.Attributes;
+using Reflex.Core;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    [Inject] private readonly Container container;
+
     [SerializeField] private int width = 8;
     [SerializeField] private int height = 8;
     [SerializeField] private int tileTypeCount = 5;
@@ -14,6 +18,15 @@ public class Board : MonoBehaviour
     private void Start()
     {
         GenerateBoard();
+    }
+
+    public void SelectTile(Tile tile)
+    {
+        if (selectedTile != null && selectedTile != tile)
+        {
+            selectedTile.HideHighlightSelection();
+        }
+        selectedTile = tile;
     }
 
     private void GenerateBoard()
@@ -39,16 +52,12 @@ public class Board : MonoBehaviour
         }
         while (IsNotCorrect(x, y, tileType));
 
-        CreateTile(x, y, tileType);
-    }
-
-    private void CreateTile(int x, int y, TileType tileType)
-    {
         Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, -height * tileSize / 2 + y * tileSize);
         GameObject tileGameObject = Instantiate(tilePrefabs[(int)tileType], transform);
         tileGameObject.transform.localPosition = localPos;
 
-        Tile tile = new(tileType, tileGameObject);
+        Tile tile = tileGameObject.GetComponent<Tile>();
+        tile.Initialize(container);
         tiles[x, y] = tile;
     }
 
