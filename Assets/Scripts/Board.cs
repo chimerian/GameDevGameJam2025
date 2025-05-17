@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BoardGenerator : MonoBehaviour
+public class Board : MonoBehaviour
 {
     [SerializeField] private int width = 8;
     [SerializeField] private int height = 8;
@@ -8,7 +8,8 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField] private int tileSize = 1;
     [SerializeField] private GameObject[] tilePrefabs;
 
-    private int[,] board;
+    private Tile[,] tiles;
+    private Tile selectedTile;
 
     private void Start()
     {
@@ -17,7 +18,7 @@ public class BoardGenerator : MonoBehaviour
 
     private void GenerateBoard()
     {
-        board = new int[width, height];
+        tiles = new Tile[width, height];
 
         for (int x = 0; x < width; x++)
         {
@@ -30,33 +31,39 @@ public class BoardGenerator : MonoBehaviour
 
     private void CreateTile(int x, int y)
     {
-        int tileId;
+        TileType tileType;
 
         do
         {
-            tileId = Random.Range(0, tileTypeCount);
+            tileType = (TileType)Random.Range(0, tileTypeCount);
         }
-        while (IsNotCorrect(x, y, tileId));
+        while (IsNotCorrect(x, y, tileType));
 
-        board[x, y] = tileId;
-
-        Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, -height * tileSize / 2 + y * tileSize);
-        GameObject tile = Instantiate(tilePrefabs[tileId], transform);
-        tile.transform.localPosition = localPos;
+        CreateTile(x, y, tileType);
     }
 
-    private bool IsNotCorrect(int x, int y, int tileId)
+    private void CreateTile(int x, int y, TileType tileType)
+    {
+        Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, -height * tileSize / 2 + y * tileSize);
+        GameObject tileGameObject = Instantiate(tilePrefabs[(int)tileType], transform);
+        tileGameObject.transform.localPosition = localPos;
+
+        Tile tile = new(tileType, tileGameObject);
+        tiles[x, y] = tile;
+    }
+
+    private bool IsNotCorrect(int x, int y, TileType tileType)
     {
         if (x >= 2 &&
-            board[x - 1, y] == tileId &&
-            board[x - 2, y] == tileId)
+            tiles[x - 1, y].TileType == tileType &&
+            tiles[x - 2, y].TileType == tileType)
         {
             return true;
         }
 
         if (y >= 2 &&
-            board[x, y - 1] == tileId &&
-            board[x, y - 2] == tileId)
+            tiles[x, y - 1].TileType == tileType &&
+            tiles[x, y - 2].TileType == tileType)
         {
             return true;
         }
