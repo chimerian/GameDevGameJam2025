@@ -11,11 +11,7 @@ public class Tile : MonoBehaviour
 
     private Animator animator;
     private Board board;
-    private Vector2 position;
-
-    public TileType TileType { get => tileType; }
-
-    public Vector2 Position { get => position; }
+    private TileData tileData;
 
     private void Awake()
     {
@@ -24,10 +20,10 @@ public class Tile : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void Initialize(Container container, Vector2 position)
+    public void Initialize(Container container, Vector2Int position)
     {
         AttributeInjector.Inject(this, container);
-        this.position = position;
+        tileData = new TileData(position, tileType);
     }
 
     [Inject]
@@ -35,6 +31,8 @@ public class Tile : MonoBehaviour
     {
         board = Board;
     }
+
+    public TileData GetTileData() => tileData;
 
     public void HideHighlightSelection()
     {

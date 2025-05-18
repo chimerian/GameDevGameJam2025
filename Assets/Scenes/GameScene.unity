@@ -450,8 +450,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1532834589}
   - {fileID: 1223306215}
+  - {fileID: 1532834589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1223306214
@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 1532834589}
   - component: {fileID: 1532834590}
   m_Layer: 0
-  m_Name: Background2
+  m_Name: BackgroundBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
