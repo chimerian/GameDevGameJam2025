@@ -1,5 +1,6 @@
 using Reflex.Attributes;
 using Reflex.Core;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class Board : MonoBehaviour
     private TileData[,] tiles;
     private List<TileSolution> solutions;
     private Tile selectedTile;
+    private TileSolution movement;
 
     private void Start()
     {
@@ -26,9 +28,14 @@ public class Board : MonoBehaviour
 
     public void SelectTile(Tile tile)
     {
-        if (selectedTile == null)
+        if (movement != null)
+        {
+            return;
+        }
+        else if (selectedTile == null)
         {
             selectedTile = tile;
+            selectedTile.ShowHighlightSelection();
         }
         else if (selectedTile == tile)
         {
@@ -38,6 +45,7 @@ public class Board : MonoBehaviour
         {
             selectedTile.HideHighlightSelection();
             selectedTile = tile;
+            selectedTile.ShowHighlightSelection();
         }
         else if (IsNeighborTile(tile))
         {
@@ -97,55 +105,6 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    private bool IsNeighborTile(Tile tile)
-    {
-        TileData selectedTileData = selectedTile.GetTileData();
-        TileData tileData = tile.GetTileData();
-
-        var dx = Mathf.Abs(selectedTileData.Position.x - tileData.Position.x);
-        var dy = Mathf.Abs(selectedTileData.Position.y - tileData.Position.y);
-        bool isNeighbor = (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
-        return isNeighbor;
-    }
-
-    private void SwapSelectionTiles(Tile tile)
-    {
-        TileData selectedTileData = selectedTile.GetTileData();
-        TileData tileData = tile.GetTileData();
-
-        //bool isValidMove = CheckMatch(selectedTileData, tileData);
-
-        Direction directionTile;
-        Direction directionSelectedTile;
-
-        if (selectedTileData.Position.x > tileData.Position.x)
-        {
-            directionTile = Direction.Right;
-            directionSelectedTile = Direction.Left;
-        }
-        else if (selectedTileData.Position.x < tileData.Position.x)
-        {
-            directionTile = Direction.Left;
-            directionSelectedTile = Direction.Right;
-        }
-        else if (selectedTileData.Position.y < tileData.Position.y)
-        {
-            directionTile = Direction.Up;
-            directionSelectedTile = Direction.Down;
-        }
-        else
-        {
-            directionTile = Direction.Down;
-            directionSelectedTile = Direction.Up;
-        }
-
-        selectedTile.StartSwapAnimation(directionSelectedTile);
-        selectedTile.HideHighlightSelection();
-        tile.StartSwapAnimation(directionTile);
-        tile.HideHighlightSelection();
-        selectedTile = null;
-    }
-
     private void CheckSolutions()
     {
         solutions = new();
@@ -173,19 +132,13 @@ public class Board : MonoBehaviour
 
     private void SwapTiles(int x1, int y1, int x2, int y2)
     {
-        var temp = tiles[x1, y1];
-        tiles[x1, y1] = tiles[x2, y2];
-        tiles[x2, y2] = temp;
-    }
-
-    private IEnumerable<TileSolution> GetSolutions()
-    {
-        return solutions;
+        (tiles[x2, y2], tiles[x1, y1]) = (tiles[x1, y1], tiles[x2, y2]);
     }
 
     private void CheckMatch(Vector2Int position, Vector2Int position2)
     {
         TileData tile = tiles[position.x, position.y];
+        TileData swapTile = tiles[position2.x, position2.y];
 
         TileData tileX_2 = position.x >= 2 ? tiles[position.x - 2, position.y] : null;
         TileData tileX_1 = position.x >= 1 ? tiles[position.x - 1, position.y] : null;
@@ -197,62 +150,59 @@ public class Board : MonoBehaviour
         TileData tileY1 = position.y < height - 1 ? tiles[position.x, position.y + 1] : null;
         TileData tileY2 = position.y < height - 2 ? tiles[position.x, position.y + 2] : null;
 
-        TileSolution tileSolution = solutions.FirstOrDefault(
-            s => (s.Position1 == position && s.Position2 == position2) ||
-                 (s.Position1 == position2 && s.Position2 == position)
-        );
+        TileSolution tileSolution = GetSolution(position, position2);
 
         bool tileSolutionExists = tileSolution != null;
         tileSolution ??= new TileSolution(position, position2);
 
         if (position.x >= 2 && position.x < width - 2 && tileX_2.TileType == tileX_1.TileType && tileX_2.TileType == tile.TileType && tileX_2.TileType == tileX1.TileType && tileX_2.TileType == tileX2.TileType)
         {
-            tileSolution.AddTile(tileX_2.TileType, 5);
+            tileSolution.AddTile(tileX_2.TileType, 5, new List<Vector2Int> { tileX_2.Position, tileX_1.Position, swapTile.Position, tileX1.Position, tileX2.Position });
         }
         else if (position.x >= 2 && position.x < width - 1 && tileX_2.TileType == tileX_1.TileType && tileX_2.TileType == tile.TileType && tileX_2.TileType == tileX1.TileType)
         {
-            tileSolution.AddTile(tileX_1.TileType, 4);
+            tileSolution.AddTile(tileX_1.TileType, 4, new List<Vector2Int> { tileX_2.Position, tileX_1.Position, swapTile.Position, tileX1.Position });
         }
         else if (position.x >= 1 && position.x < width - 2 && tileX_1.TileType == tile.TileType && tileX_1.TileType == tileX1.TileType && tileX_1.TileType == tileX2.TileType)
         {
-            tileSolution.AddTile(tileX_1.TileType, 4);
+            tileSolution.AddTile(tileX_1.TileType, 4, new List<Vector2Int> { tileX_1.Position, swapTile.Position, tileX1.Position, tileX2.Position });
         }
         else if (position.x >= 2 && tileX_2.TileType == tileX_1.TileType && tileX_2.TileType == tile.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { tileX_2.Position, tileX_1.Position, swapTile.Position });
         }
         else if (position.x >= 1 && position.x < width - 1 && tileX_1.TileType == tile.TileType && tileX_1.TileType == tileX1.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { tileX_1.Position, swapTile.Position, tileX1.Position });
         }
         else if (position.x < width - 2 && tile.TileType == tileX1.TileType && tile.TileType == tileX2.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { swapTile.Position, tileX1.Position, tileX2.Position });
         }
 
         if (position.y >= 2 && position.y < height - 2 && tileY_2.TileType == tileY_1.TileType && tileY_2.TileType == tile.TileType && tileY_2.TileType == tileY1.TileType && tileY_2.TileType == tileY2.TileType)
         {
-            tileSolution.AddTile(tileY_2.TileType, 5);
+            tileSolution.AddTile(tileY_2.TileType, 5, new List<Vector2Int> { tileY_2.Position, tileY_1.Position, swapTile.Position, tileY1.Position, tileY2.Position });
         }
         else if (position.y >= 2 && position.y < height - 1 && tileY_2.TileType == tileY_1.TileType && tileY_2.TileType == tile.TileType && tileY_2.TileType == tileY1.TileType)
         {
-            tileSolution.AddTile(tileY_1.TileType, 4);
+            tileSolution.AddTile(tileY_1.TileType, 4, new List<Vector2Int> { tileY_2.Position, tileY_1.Position, swapTile.Position, tileY1.Position });
         }
         else if (position.y >= 1 && position.y < height - 2 && tileY_1.TileType == tile.TileType && tileY_1.TileType == tileY1.TileType && tileY_1.TileType == tileY2.TileType)
         {
-            tileSolution.AddTile(tileY_1.TileType, 4);
+            tileSolution.AddTile(tileY_1.TileType, 4, new List<Vector2Int> { tileY_1.Position, swapTile.Position, tileY1.Position, tileY2.Position });
         }
         else if (position.y >= 2 && tileY_2.TileType == tileY_1.TileType && tileY_2.TileType == tile.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { tileY_2.Position, tileY_1.Position, swapTile.Position });
         }
         else if (position.y >= 1 && position.y < height - 1 && tileY_1.TileType == tile.TileType && tileY_1.TileType == tileY1.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { tileY_1.Position, swapTile.Position, tileY1.Position });
         }
         else if (position.y < height - 2 && tile.TileType == tileY1.TileType && tile.TileType == tileY2.TileType)
         {
-            tileSolution.AddTile(tile.TileType, 3);
+            tileSolution.AddTile(tile.TileType, 3, new List<Vector2Int> { swapTile.Position, tileY1.Position, tileY2.Position });
         }
 
         if (!tileSolution.IsEmpty() && !tileSolutionExists)
@@ -260,9 +210,93 @@ public class Board : MonoBehaviour
             solutions.Add(tileSolution);
         }
 
-        if (!tileSolution.IsEmpty())
+        //if (!tileSolution.IsEmpty())
+        //{
+        //    Debug.Log(tileSolution);
+        //}
+    }
+
+    private bool IsNeighborTile(Tile tile)
+    {
+        TileData selectedTileData = selectedTile.GetTileData();
+        TileData tileData = tile.GetTileData();
+
+        var dx = Mathf.Abs(selectedTileData.Position.x - tileData.Position.x);
+        var dy = Mathf.Abs(selectedTileData.Position.y - tileData.Position.y);
+        bool isNeighbor = (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+        return isNeighbor;
+    }
+
+    private void SwapSelectionTiles(Tile tile)
+    {
+        TileData selectedTileData = selectedTile.GetTileData();
+        TileData tileData = tile.GetTileData();
+
+        Direction directionTile;
+        Direction directionSelectedTile;
+
+        if (selectedTileData.Position.x > tileData.Position.x)
         {
-            Debug.Log(tileSolution);
+            directionTile = Direction.Right;
+            directionSelectedTile = Direction.Left;
         }
+        else if (selectedTileData.Position.x < tileData.Position.x)
+        {
+            directionTile = Direction.Left;
+            directionSelectedTile = Direction.Right;
+        }
+        else if (selectedTileData.Position.y < tileData.Position.y)
+        {
+            directionTile = Direction.Up;
+            directionSelectedTile = Direction.Down;
+        }
+        else
+        {
+            directionTile = Direction.Down;
+            directionSelectedTile = Direction.Up;
+        }
+
+        TileSolution tileSolution = GetSolution(selectedTileData.Position, tileData.Position);
+        if (tileSolution != null)
+        {
+
+            SwapTiles(selectedTileData.Position.x, selectedTileData.Position.y, tileData.Position.x, tileData.Position.y);
+            selectedTile.StartCollectAnimation(directionSelectedTile);
+            tile.StartCollectAnimation(directionTile);
+            movement = tileSolution;
+            StartCoroutine(Collect());
+        }
+        else
+        {
+            selectedTile.StartSwapAnimation(directionSelectedTile);
+            tile.StartSwapAnimation(directionTile);
+        }
+
+        selectedTile.HideHighlightSelection();
+        tile.HideHighlightSelection();
+        selectedTile = null;
+    }
+
+    private TileSolution GetSolution(Vector2Int position, Vector2Int position2)
+    {
+        return solutions.FirstOrDefault(
+            solution => (solution.Position1 == position && solution.Position2 == position2) ||
+                 (solution.Position1 == position2 && solution.Position2 == position)
+        );
+    }
+
+    private IEnumerator Collect()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        //Tutaj można dodać punktację
+        //movement.GetTileCount(TileType.type1);
+
+        foreach (Vector2Int position in movement.GetTiles())
+        {
+            tiles[position.x, position.y].Tile.Collect();
+        }
+
+        movement = null;
     }
 }

@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour
     public void Initialize(Container container, Vector2Int position)
     {
         AttributeInjector.Inject(this, container);
-        tileData = new TileData(position, tileType);
+        tileData = new TileData(position, tileType, this);
     }
 
     [Inject]
@@ -34,6 +34,11 @@ public class Tile : MonoBehaviour
 
     public TileData GetTileData() => tileData;
 
+    public void ShowHighlightSelection()
+    {
+        tileHighlightSelection.SetActive(true);
+    }
+
     public void HideHighlightSelection()
     {
         tileHighlightSelection.SetActive(false);
@@ -41,8 +46,6 @@ public class Tile : MonoBehaviour
 
     public void StartSwapAnimation(Direction direction)
     {
-        //TODO: te animacje s¹ super, ale tylko gdy nie ma dopasowania
-        //Je¿eli bêdzie dopasowanie, to powinno byæ tylko "po³owê animacji" + animacja znikania (wybuchu?)
         if (direction == Direction.Left)
         {
             animator.SetTrigger("SwapLeft");
@@ -61,9 +64,33 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void StartCollectAnimation(Direction direction)
+    {
+        if (direction == Direction.Left)
+        {
+            animator.SetTrigger("MoveLeft");
+        }
+        else if (direction == Direction.Right)
+        {
+            animator.SetTrigger("MoveRight");
+        }
+        else if (direction == Direction.Up)
+        {
+            animator.SetTrigger("MoveUp");
+        }
+        else if (direction == Direction.Down)
+        {
+            animator.SetTrigger("MoveDown");
+        }
+    }
+
+    public void Collect()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void OnMouseDown()
     {
-        ShowHighlightSelection();
         board.SelectTile(this);
     }
 
@@ -75,11 +102,6 @@ public class Tile : MonoBehaviour
     private void OnMouseExit()
     {
         HideSelection();
-    }
-
-    private void ShowHighlightSelection()
-    {
-        tileHighlightSelection.SetActive(true);
     }
 
     private void ShowSelection()
