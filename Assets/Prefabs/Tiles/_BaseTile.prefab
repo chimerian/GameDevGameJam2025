@@ -226,6 +226,7 @@ MonoBehaviour:
   tileSelection: {fileID: 171097760295635071}
   tileHighlightSelection: {fileID: 7448452331555341953}
   tileType: 0
+  imageGameObject: {fileID: 2372110361005979179}
 --- !u!61 &-4098362561340247077
 BoxCollider2D:
   m_ObjectHideFlags: 0

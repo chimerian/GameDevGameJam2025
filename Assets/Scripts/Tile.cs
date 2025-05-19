@@ -8,6 +8,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private GameObject tileSelection;
     [SerializeField] private GameObject tileHighlightSelection;
     [SerializeField] private TileType tileType;
+    [SerializeField] private GameObject imageGameObject;
 
     private Animator animator;
     private Board board;
@@ -34,6 +35,8 @@ public class Tile : MonoBehaviour
 
     public TileData GetTileData() => tileData;
 
+    public GameObject GetImageGameObject() => imageGameObject;
+
     public void ShowHighlightSelection()
     {
         tileHighlightSelection.SetActive(true);
@@ -42,6 +45,15 @@ public class Tile : MonoBehaviour
     public void HideHighlightSelection()
     {
         tileHighlightSelection.SetActive(false);
+    }
+
+    public void StartIdleAnimation()
+    {
+        animator.enabled = false;
+        imageGameObject.transform.localPosition = Vector3.zero;
+        animator.Rebind();
+        animator.enabled = true;
+        animator.Play("TileIdleAnimation", 0, 0f);
     }
 
     public void StartSwapAnimation(Direction direction)
