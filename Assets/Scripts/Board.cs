@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Board : MonoBehaviour
 {
@@ -64,21 +65,21 @@ public class Board : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                CreateTile(x, y);
+                TileType tileType;
+
+                do
+                {
+                    tileType = (TileType)Random.Range(0, tileTypeCount);
+                }
+                while (IsNotCorrect(x, y, tileType));
+
+                CreateTile(x, y, tileType);
             }
         }
     }
 
-    private void CreateTile(int x, int y)
+    private void CreateTile(int x, int y, TileType tileType)
     {
-        TileType tileType;
-
-        do
-        {
-            tileType = (TileType)Random.Range(0, tileTypeCount);
-        }
-        while (IsNotCorrect(x, y, tileType));
-
         Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, height * tileSize / 2 - (y + 1) * tileSize);
         GameObject tileGameObject = Instantiate(tilePrefabs[(int)tileType], transform);
         tileGameObject.transform.localPosition = localPos;
@@ -270,7 +271,7 @@ public class Board : MonoBehaviour
         TileSolution tileSolution = GetSolution(selectedTileData.Position, selectedTileData2.Position);
         if (tileSolution != null)
         {
-            SwapTiles(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData2.Position.x, selectedTileData2.Position.y);
+            SwapSelectedTiles(selectedTileData, selectedTileData2);
             selectedTile.StartCollectAnimation(directionSelectedTile);
             selectedTile2.StartCollectAnimation(directionSelectedTile2);
             blockMode = true;
@@ -288,6 +289,12 @@ public class Board : MonoBehaviour
         selectedTile2.HideHighlightSelection();
     }
 
+    private void SwapSelectedTiles(TileData selectedTileData, TileData selectedTileData2)
+    {
+        SwapTiles(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData2.Position.x, selectedTileData2.Position.y);
+        (selectedTile2.GetTileData().Position, selectedTile.GetTileData().Position) = (selectedTile.GetTileData().Position, selectedTile2.GetTileData().Position);
+    }
+
     private TileSolution GetSolution(Vector2Int position, Vector2Int position2)
     {
         return solutions.FirstOrDefault(
@@ -298,51 +305,82 @@ public class Board : MonoBehaviour
 
     private IEnumerator Collect()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
 
-        //Tutaj powinny się graficznie zamienić i należy przełączyć animację na idle
-        GameObject gameObject1 = selectedTile.GetImageGameObject();
-        selectedTile.StartIdleAnimation();
-        GameObject gameObject2 = selectedTile2.GetImageGameObject();
-        selectedTile2.StartIdleAnimation();
-
-        // Proste podmiany transformów (np. zamień pozycje GameObjectów):
-        //Vector3 pos1 = gameObject1.transform.position;
-        //Vector3 pos2 = gameObject2.transform.position;
-
-        //gameObject1.transform.position = pos2;
-        //gameObject1.transform.localPosition = Vector3.zero;
-        //gameObject2.transform.position = pos1;
-        //gameObject2.transform.localPosition = Vector3.zero;
-
-        // Jeżeli są one parentowane do np. pustych GameObjectów:
-        Transform parent1 = gameObject1.transform.parent;
-        Transform parent2 = gameObject2.transform.parent;
-
-        gameObject1.transform.SetParent(null);
-        gameObject2.transform.SetParent(null);
-        gameObject1.transform.SetParent(parent2);
-        gameObject2.transform.SetParent(parent1);
+        TileData selectedTileData = selectedTile.GetTileData();
+        TileData selectedTileData2 = selectedTile2.GetTileData();
 
         //Tutaj można dodać punktację
         //movement.GetTileCount(TileType.type1);
+        //todo: tutaj powinny być kolejen sprawdzenia, generowanie brakujących itp.
 
         GetSolutions(false);
 
-        //solutions
         foreach (TileSolution solution in solutions)
         {
-            foreach (Vector2Int position in solution.GetTiles())
+            Vector2Int position = solution.Position1;
+            tiles[position.x, position.y].Tile.Destroy();
+            tiles[position.x, position.y] = null;
+        }
+
+        if (tiles[selectedTileData.Position.x, selectedTileData.Position.y] != null)
+        {
+            selectedTile.Destroy();
+            CreateTile(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData.TileType);
+            selectedTile = null;
+        }
+
+        if (tiles[selectedTileData2.Position.x, selectedTileData2.Position.y] != null)
+        {
+            selectedTile2.Destroy();
+            CreateTile(selectedTileData2.Position.x, selectedTileData2.Position.y, selectedTileData2.TileType);
+            selectedTile2 = null;
+        }
+
+        MoveDown();
+
+        //GetSolutions(true);
+        blockMode = false;
+    }
+
+    private void MoveDown()
+    {
+        Vector2Int[,] fallVectors = new Vector2Int[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            int fallCount = 0;
+
+            for (int y = height - 1; y >= 0; y--)
             {
-                tiles[position.x, position.y].Tile.Collect();
+                if (tiles[x, y] == null)
+                {
+                    fallCount++;
+                }
+                else
+                {
+                    fallVectors[x, y] = new Vector2Int(0, fallCount);
+                }
             }
         }
 
-        //todo: tutaj powinny być kolejen sprawdzenia, generowanie brakujących itp.
-        GetSolutions(true);
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = height - 1; y >= 0; y--)
+            {
+                Vector2Int fall = fallVectors[x, y];
+                if (fall == Vector2Int.zero)
+                    continue;
 
-        selectedTile = null;
-        selectedTile2 = null;
-        blockMode = false;
+                int newY = y + fall.y;
+
+                TileData tileData = tiles[x, y];
+                tileData.Position = new Vector2Int(x, newY);
+                tiles[x, newY] = tileData;
+                tiles[x, y] = null;
+
+                tileData.Tile.MoveDown(fall.y);
+            }
+        }
     }
 }

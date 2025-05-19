@@ -1,6 +1,7 @@
 using Reflex.Attributes;
 using Reflex.Core;
 using Reflex.Injectors;
+using System.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -96,9 +97,34 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void Collect()
+    public void MoveDown(int tilesCount)
     {
-        gameObject.SetActive(false);
+        StartCoroutine(MoveDownCoroutine(tilesCount));
+    }
+
+    public IEnumerator MoveDownCoroutine(int tilesCount)
+    {
+        float duration = 0.3f;
+        float distance = 1f * tilesCount;
+        Vector3 startPosition = transform.localPosition;
+        Vector3 targetPosition = startPosition + Vector3.down * distance;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            transform.localPosition = Vector3.Lerp(startPosition, targetPosition, t);
+            yield return null;
+        }
+
+        transform.localPosition = targetPosition;
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject, 0);
     }
 
     private void OnMouseDown()
