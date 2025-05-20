@@ -8,6 +8,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     [Inject] private readonly Container container;
+    [Inject] private readonly Players players;
 
     [SerializeField] private int width = 8;
     [SerializeField] private int height = 8;
@@ -33,6 +34,10 @@ public class Board : MonoBehaviour
         {
             return;
         }
+        //else if (players.CurrentPlayer.Type != PlayerType.Human)
+        //{
+        //    return;
+        //}
         else if (selectedTile == null)
         {
             selectedTile = tile;
@@ -273,19 +278,20 @@ public class Board : MonoBehaviour
             SwapSelectedTiles(selectedTileData, selectedTileData2);
             selectedTile.StartCollectAnimation(directionSelectedTile);
             selectedTile2.StartCollectAnimation(directionSelectedTile2);
+            selectedTile.HideHighlightSelection();
+            selectedTile2.HideHighlightSelection();
             blockMode = true;
             StartCoroutine(Collect());
         }
         else
         {
+            selectedTile.HideHighlightSelection();
+            selectedTile2.HideHighlightSelection();
             selectedTile.StartSwapAnimation(directionSelectedTile);
             selectedTile = null;
             selectedTile2.StartSwapAnimation(directionSelectedTile2);
             selectedTile2 = null;
         }
-
-        selectedTile.HideHighlightSelection();
-        selectedTile2.HideHighlightSelection();
     }
 
     private void SwapSelectedTiles(TileData selectedTileData, TileData selectedTileData2)
@@ -324,7 +330,7 @@ public class Board : MonoBehaviour
             foreach (TileSolution solution in solutions)
             {
                 Vector2Int position = solution.Position1;
-                AddScore(tiles[position.x, position.y].TileType);
+                players.CurrentPlayer.AddPoints(tiles[position.x, position.y].TileType, 1);
                 tiles[position.x, position.y].Tile?.Destroy();
                 tiles[position.x, position.y] = null;
             }
@@ -344,11 +350,7 @@ public class Board : MonoBehaviour
 
         GetSolutions(true);
         blockMode = false;
-    }
-
-    private void AddScore(TileType tileType)
-    {
-        //add score
+        players.NextPlayer();
     }
 
     private void GenerateMissingTiles()
