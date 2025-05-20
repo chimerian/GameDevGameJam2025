@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Board : MonoBehaviour
 {
@@ -310,37 +309,63 @@ public class Board : MonoBehaviour
         TileData selectedTileData = selectedTile.GetTileData();
         TileData selectedTileData2 = selectedTile2.GetTileData();
 
-        //Tutaj można dodać punktację
-        //movement.GetTileCount(TileType.type1);
-        //todo: tutaj powinny być kolejen sprawdzenia, generowanie brakujących itp.
+        selectedTile.Destroy();
+        CreateTile(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData.TileType);
+        selectedTile = null;
+
+        selectedTile2.Destroy();
+        CreateTile(selectedTileData2.Position.x, selectedTileData2.Position.y, selectedTileData2.TileType);
+        selectedTile2 = null;
 
         GetSolutions(false);
 
-        foreach (TileSolution solution in solutions)
+        do
         {
-            Vector2Int position = solution.Position1;
-            tiles[position.x, position.y].Tile.Destroy();
-            tiles[position.x, position.y] = null;
+            foreach (TileSolution solution in solutions)
+            {
+                Vector2Int position = solution.Position1;
+                AddScore(tiles[position.x, position.y].TileType);
+                tiles[position.x, position.y].Tile?.Destroy();
+                tiles[position.x, position.y] = null;
+            }
+
+            MoveDown();
+            yield return new WaitForSeconds(0.4f);//animation down time
+            GenerateMissingTiles();
+            yield return new WaitForSeconds(0.2f);//animation appear time
+            GetSolutions(false);
+
+            if (solutions.Count > 0)
+            {
+                yield return new WaitForSeconds(0.5f);//time for player to see what was created
+            }
         }
+        while (solutions.Count > 0);
 
-        if (tiles[selectedTileData.Position.x, selectedTileData.Position.y] != null)
-        {
-            selectedTile.Destroy();
-            CreateTile(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData.TileType);
-            selectedTile = null;
-        }
-
-        if (tiles[selectedTileData2.Position.x, selectedTileData2.Position.y] != null)
-        {
-            selectedTile2.Destroy();
-            CreateTile(selectedTileData2.Position.x, selectedTileData2.Position.y, selectedTileData2.TileType);
-            selectedTile2 = null;
-        }
-
-        MoveDown();
-
-        //GetSolutions(true);
+        GetSolutions(true);
         blockMode = false;
+    }
+
+    private void AddScore(TileType tileType)
+    {
+        //add score
+    }
+
+    private void GenerateMissingTiles()
+    {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (tiles[x, y] != null)
+                {
+                    continue;
+                }
+
+                TileType tileType = (TileType)Random.Range(0, tileTypeCount);
+                CreateTile(x, y, tileType);
+            }
+        }
     }
 
     private void MoveDown()
