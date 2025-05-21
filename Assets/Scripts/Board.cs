@@ -30,14 +30,10 @@ public class Board : MonoBehaviour
 
     public void SelectTile(Tile tile)
     {
-        if (blockMode)
+        if (blockMode && players.CurrentPlayer.Type == PlayerType.Human)
         {
             return;
         }
-        //else if (players.CurrentPlayer.Type != PlayerType.Human)
-        //{
-        //    return;
-        //}
         else if (selectedTile == null)
         {
             selectedTile = tile;
@@ -59,6 +55,17 @@ public class Board : MonoBehaviour
             selectedTile2 = tile;
             SwapSelectionTiles();
         }
+    }
+
+    public TileSolution GetRandomSolution()
+    {
+        int randomIndex = Random.Range(0, solutions.Count);
+        return solutions[randomIndex];
+    }
+
+    public Tile GetTile(Vector2Int position)
+    {
+        return tiles[position.x, position.y].Tile;
     }
 
     private void GenerateBoard()
@@ -349,8 +356,11 @@ public class Board : MonoBehaviour
         while (solutions.Count > 0);
 
         GetSolutions(true);
-        blockMode = false;
         players.NextPlayer();
+        if (players.CurrentPlayer.Type == PlayerType.Human)
+        {
+            blockMode = false;
+        }
     }
 
     private void GenerateMissingTiles()
