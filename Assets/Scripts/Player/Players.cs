@@ -24,8 +24,8 @@ public class Players : MonoBehaviour
     {
         players.Add(new Player("Player1", PlayerType.Human, Player1Panel, board));
         players.Add(new PlayerAI("Player2", PlayerType.AI_Easy, Player2Panel, board));
-        //players.Add(new Player("Player3", PlayerType.AI_Easy, Player3Panel));
-        //players.Add(new Player("Player4", PlayerType.AI_Easy, Player4Panel));
+        players.Add(new PlayerAI("Player3", PlayerType.AI_Easy, Player3Panel, board));
+        players.Add(new PlayerAI("Player4", PlayerType.AI_Easy, Player4Panel, board));
         currentPlayer = players[0];
         UpdateText();
         ShowPlayerTurnText();

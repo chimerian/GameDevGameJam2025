@@ -1,0 +1,13 @@
+Known errors
+- when I remove redundantly one tile then there is an animation of appearance (and it should not)
+
+
+TODO:
+- Menu scene with selection of number of AI opponents
+- Music
+- Sounds
+- Tiny World
+- Tutorial
+- Graphics swap
+- Explosion animations
++ AI movement animations

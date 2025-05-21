@@ -129,16 +129,31 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (board.IsBlockedMode())
+        {
+            return;
+        }
+
         board.SelectTile(this);
     }
 
     private void OnMouseEnter()
     {
+        if (board.IsBlockedMode())
+        {
+            return;
+        }
+
         ShowSelection();
     }
 
     private void OnMouseExit()
     {
+        if (board.IsBlockedMode())
+        {
+            return;
+        }
+
         HideSelection();
     }
 

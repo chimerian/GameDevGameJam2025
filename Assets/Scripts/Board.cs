@@ -53,6 +53,7 @@ public class Board : MonoBehaviour
         else if (IsNeighborTile(tile))
         {
             selectedTile2 = tile;
+            selectedTile2.ShowHighlightSelection();
             SwapSelectionTiles();
         }
     }
@@ -66,6 +67,11 @@ public class Board : MonoBehaviour
     public Tile GetTile(Vector2Int position)
     {
         return tiles[position.x, position.y].Tile;
+    }
+
+    public bool IsBlockedMode()
+    {
+        return blockMode;
     }
 
     private void GenerateBoard()
@@ -285,8 +291,6 @@ public class Board : MonoBehaviour
             SwapSelectedTiles(selectedTileData, selectedTileData2);
             selectedTile.StartCollectAnimation(directionSelectedTile);
             selectedTile2.StartCollectAnimation(directionSelectedTile2);
-            selectedTile.HideHighlightSelection();
-            selectedTile2.HideHighlightSelection();
             blockMode = true;
             StartCoroutine(Collect());
         }
@@ -318,6 +322,9 @@ public class Board : MonoBehaviour
     private IEnumerator Collect()
     {
         yield return new WaitForSeconds(0.5f);
+
+        selectedTile.HideHighlightSelection();
+        selectedTile2.HideHighlightSelection();
 
         TileData selectedTileData = selectedTile.GetTileData();
         TileData selectedTileData2 = selectedTile2.GetTileData();
