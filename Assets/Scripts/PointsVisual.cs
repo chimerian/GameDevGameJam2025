@@ -3,12 +3,18 @@ using UnityEngine;
 
 public class PointsVisual : MonoBehaviour
 {
+    [SerializeField] private GameObject Border;
     [SerializeField] private TextMeshPro playerNameText;
     [SerializeField] private TextMeshPro points1;
     [SerializeField] private TextMeshPro points2;
     [SerializeField] private TextMeshPro points3;
     [SerializeField] private TextMeshPro points4;
     [SerializeField] private TextMeshPro points5;
+
+    private void Start()
+    {
+        HideBorder();
+    }
 
     public void SetPlayerName(string playerName)
     {
@@ -39,5 +45,15 @@ public class PointsVisual : MonoBehaviour
                 points5.text = points.ToString();
                 break;
         }
+    }
+
+    public void ShowBorder()
+    {
+        Border.SetActive(true);
+    }
+
+    public void HideBorder()
+    {
+        Border.SetActive(false);
     }
 }

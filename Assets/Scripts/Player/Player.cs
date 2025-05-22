@@ -1,9 +1,8 @@
 using Reflex.Attributes;
-using Reflex.Core;
-using Reflex.Injectors;
+using System;
 using System.Collections.Generic;
 
-public class Player // it should be abstract but we need to use it in the inspector
+public class Player
 {
     [Inject] protected readonly TurnSystem turnSystem;
 
@@ -21,6 +20,8 @@ public class Player // it should be abstract but we need to use it in the inspec
         this.pointsVisual = pointsVisual;
         this.board = board;
 
+        pointsVisual.SetPlayerName(name);
+
         points = new Dictionary<TileType, int>
         {
             { TileType.type1, 0 },
@@ -37,14 +38,22 @@ public class Player // it should be abstract but we need to use it in the inspec
 
     public virtual void PlayTurn()
     {
-        // Implement the logic for the player's turn here.
-        // This could be overridden in derived classes for AI players.
     }
 
     public void AddPoints(TileType tileType, int pointsToAdd)
     {
         points[tileType] += pointsToAdd;
         pointsVisual.SetPoints(tileType, points[tileType]);
+    }
+
+    public void ShowBorder()
+    {
+        pointsVisual.ShowBorder();
+    }
+
+    public void HideBorder()
+    {
+        pointsVisual.HideBorder();
     }
 
     public int GetPointsCount(TileType tileType)

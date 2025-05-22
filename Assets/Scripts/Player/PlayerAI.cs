@@ -1,6 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
 public class PlayerAI : Player
 {
     public PlayerAI(string name, PlayerType type, PointsVisual pointsVisual, Board board) : base(name, type, pointsVisual, board)
@@ -14,12 +11,5 @@ public class PlayerAI : Player
         board.SelectTile(tile1);
         Tile tile2 = board.GetTile(tileSolution.Position2);
         board.SelectTile(tile2);
-    }
-
-    private IEnumerator Play()
-    {
-        board.GetRandomSolution();
-
-        yield return new WaitForSeconds(0.5f);
     }
 }

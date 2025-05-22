@@ -22,10 +22,10 @@ public class Players : MonoBehaviour
 
     private void Start()
     {
-        players.Add(new Player("Player1", PlayerType.Human, Player1Panel, board));
-        players.Add(new PlayerAI("Player2", PlayerType.AI_Easy, Player2Panel, board));
-        players.Add(new PlayerAI("Player3", PlayerType.AI_Easy, Player3Panel, board));
-        players.Add(new PlayerAI("Player4", PlayerType.AI_Easy, Player4Panel, board));
+        players.Add(new Player("PLAYER", PlayerType.Human, Player1Panel, board));
+        players.Add(new PlayerAI("CPU 1", PlayerType.AI_Easy, Player2Panel, board));
+        players.Add(new PlayerAI("CPU 2", PlayerType.AI_Easy, Player3Panel, board));
+        players.Add(new PlayerAI("CPU 3", PlayerType.AI_Easy, Player4Panel, board));
         currentPlayer = players[0];
         UpdateText();
         ShowPlayerTurnText();
@@ -35,6 +35,7 @@ public class Players : MonoBehaviour
 
     public void NextPlayer()
     {
+        currentPlayer.HideBorder();
         int currentIndex = players.IndexOf(currentPlayer);
         if (currentIndex == players.Count - 1)
         {
@@ -46,6 +47,7 @@ public class Players : MonoBehaviour
             currentPlayer = players[currentIndex + 1];
         }
 
+        currentPlayer.ShowBorder();
         StartCoroutine(StartNewPlayerMove());
     }
 
