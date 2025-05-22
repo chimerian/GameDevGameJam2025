@@ -13,7 +13,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int width = 8;
     [SerializeField] private int height = 8;
     [SerializeField] private int tileTypeCount = 5;
-    [SerializeField] private int tileSize = 1;
+    [SerializeField] private float tileSize = 1;
     [SerializeField] private GameObject[] tilePrefabs;
 
     private TileData[,] tiles;
