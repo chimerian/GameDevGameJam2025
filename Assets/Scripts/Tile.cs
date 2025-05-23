@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private GameObject tileSelection;
     [SerializeField] private GameObject tileHighlightSelection;
-    [SerializeField] private TileType tileType;
+    [SerializeField] private ResourceType tileType;
     [SerializeField] private GameObject imageGameObject;
 
     private Animator animator;

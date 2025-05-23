@@ -1,6 +1,6 @@
 public class PlayerAI : Player
 {
-    public PlayerAI(string name, PlayerType type, PointsVisual pointsVisual, Board board) : base(name, type, pointsVisual, board)
+    public PlayerAI(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players) : base(name, type, pointsVisual, board, players)
     {
     }
 

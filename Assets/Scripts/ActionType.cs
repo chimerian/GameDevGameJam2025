@@ -1,16 +1,8 @@
-using UnityEngine;
-
-public class ActionType : MonoBehaviour
+public enum ActionType
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    LayEgg,
+    HatchAnt,
+    BuildTunnel,
+    BuildChamber,
+    TransformChamber
 }

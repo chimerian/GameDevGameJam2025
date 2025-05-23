@@ -21,27 +21,27 @@ public class PointsVisual : MonoBehaviour
         playerNameText.text = playerName;
     }
 
-    public void SetPoints(TileType tileType, int points)
+    public void SetPoints(ResourceType tileType, int points)
     {
         switch (tileType)
         {
-            case TileType.type1:
+            case ResourceType.type1:
                 points1.text = points.ToString();
                 break;
 
-            case TileType.type2:
+            case ResourceType.type2:
                 points2.text = points.ToString();
                 break;
 
-            case TileType.type3:
+            case ResourceType.type3:
                 points3.text = points.ToString();
                 break;
 
-            case TileType.type4:
+            case ResourceType.type4:
                 points4.text = points.ToString();
                 break;
 
-            case TileType.type5:
+            case ResourceType.type5:
                 points5.text = points.ToString();
                 break;
         }

@@ -6,7 +6,7 @@ TODO:
 - Menu scene with selection of number of AI opponents
 - Music
 - Sounds
-- Tiny World
++ Tiny World
 - Tutorial
 - Graphics swap
 - Explosion animations

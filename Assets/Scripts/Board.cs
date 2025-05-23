@@ -82,11 +82,11 @@ public class Board : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                TileType tileType;
+                ResourceType tileType;
 
                 do
                 {
-                    tileType = (TileType)Random.Range(0, tileTypeCount);
+                    tileType = (ResourceType)Random.Range(0, tileTypeCount);
                 }
                 while (IsNotCorrect(x, y, tileType));
 
@@ -95,7 +95,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void CreateTile(int x, int y, TileType tileType)
+    private void CreateTile(int x, int y, ResourceType tileType)
     {
         Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, height * tileSize / 2 - (y + 1) * tileSize);
         GameObject tileGameObject = Instantiate(tilePrefabs[(int)tileType], transform);
@@ -107,7 +107,7 @@ public class Board : MonoBehaviour
         tiles[x, y] = tile.GetTileData();
     }
 
-    private bool IsNotCorrect(int x, int y, TileType tileType)
+    private bool IsNotCorrect(int x, int y, ResourceType tileType)
     {
         if (x >= 2 &&
             tiles[x - 1, y].TileType == tileType &&
@@ -344,7 +344,7 @@ public class Board : MonoBehaviour
             foreach (TileSolution solution in solutions)
             {
                 Vector2Int position = solution.Position1;
-                players.CurrentPlayer.AddPoints(tiles[position.x, position.y].TileType, 1);
+                players.CurrentPlayer.ChangePoints(tiles[position.x, position.y].TileType, 1);
                 tiles[position.x, position.y].Tile?.Destroy();
                 tiles[position.x, position.y] = null;
             }
@@ -381,7 +381,7 @@ public class Board : MonoBehaviour
                     continue;
                 }
 
-                TileType tileType = (TileType)Random.Range(0, tileTypeCount);
+                ResourceType tileType = (ResourceType)Random.Range(0, tileTypeCount);
                 CreateTile(x, y, tileType);
             }
         }

@@ -3,17 +3,17 @@ using UnityEngine;
 public class TileData
 {
     private Vector2Int position;
-    private TileType tileType;
+    private ResourceType tileType;
     private Tile tile;
 
-    public TileData(Vector2Int position, TileType tileType, Tile tile)
+    public TileData(Vector2Int position, ResourceType tileType, Tile tile)
     {
         this.Position = position;
         this.tileType = tileType;
         this.tile = tile;
     }
 
-    public TileType TileType { get => tileType; }
+    public ResourceType TileType { get => tileType; }
 
     public Vector2Int Position { get => position; set => position = value; }
 

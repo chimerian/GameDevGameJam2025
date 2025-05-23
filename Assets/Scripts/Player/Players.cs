@@ -17,18 +17,21 @@ public class Players : MonoBehaviour
     [SerializeField] private PointsVisual Player3Panel;
     [SerializeField] private PointsVisual Player4Panel;
 
+    [SerializeField] private List<Button> ActionButtons;
+
     private readonly List<Player> players = new();
     private Player currentPlayer;
 
     private void Start()
     {
-        players.Add(new Player("PLAYER", PlayerType.Human, Player1Panel, board));
-        players.Add(new PlayerAI("CPU 1", PlayerType.AI_Easy, Player2Panel, board));
-        players.Add(new PlayerAI("CPU 2", PlayerType.AI_Easy, Player3Panel, board));
-        players.Add(new PlayerAI("CPU 3", PlayerType.AI_Easy, Player4Panel, board));
+        players.Add(new Player("PLAYER", PlayerType.Human, Player1Panel, board, this));
+        players.Add(new PlayerAI("CPU 1", PlayerType.AI_Easy, Player2Panel, board, this));
+        players.Add(new PlayerAI("CPU 2", PlayerType.AI_Easy, Player3Panel, board, this));
+        players.Add(new PlayerAI("CPU 3", PlayerType.AI_Easy, Player4Panel, board, this));
         currentPlayer = players[0];
         UpdateText();
         ShowPlayerTurnText();
+        SetupButtons();
     }
 
     public Player CurrentPlayer => currentPlayer;
@@ -51,8 +54,38 @@ public class Players : MonoBehaviour
         StartCoroutine(StartNewPlayerMove());
     }
 
+    public void SetupButtons()
+    {
+        foreach (Button button in ActionButtons)
+        {
+            button.SetEnabled(false);
+
+            if (currentPlayer.Type != PlayerType.Human)
+            {
+                break;
+            }
+
+            bool hasEnoughtResources = true;
+            for (int i = 0; i < 7; i++)
+            {
+                if (button.GetCost(i) > currentPlayer.GetPointsCount((ResourceType)i))
+                {
+                    hasEnoughtResources = false;
+                    break;
+                }
+            }
+
+            if (hasEnoughtResources)
+            {
+                button.SetEnabled(true);
+            }
+        }
+    }
+
     private IEnumerator StartNewPlayerMove()
     {
+        SetupButtons();
+
         ShowPlayerTurnText();
         UpdateText();
 

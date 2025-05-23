@@ -6,19 +6,19 @@ public class TileSolution
 {
     private Vector2Int position1;
     private Vector2Int position2;
-    private readonly Dictionary<TileType, int> tileCounts;
+    private readonly Dictionary<ResourceType, int> tileCounts;
 
     public TileSolution(Vector2Int position1, Vector2Int position2)
     {
         this.position1 = position1;
         this.position2 = position2;
-        tileCounts = new Dictionary<TileType, int>();
+        tileCounts = new Dictionary<ResourceType, int>();
     }
 
     public Vector2Int Position1 => position1;
     public Vector2Int Position2 => position2;
 
-    public void AddTile(TileType tileType, int count, List<Vector2Int> tiles)
+    public void AddTile(ResourceType tileType, int count, List<Vector2Int> tiles)
     {
         if (!tileCounts.ContainsKey(tileType))
         {
