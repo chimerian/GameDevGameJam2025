@@ -1,10 +1,8 @@
-using Reflex.Attributes;
 using System.Collections.Generic;
 
 public class Player
 {
-    [Inject] protected readonly TurnSystem turnSystem;
-
+    protected Anthill anthill;
     protected Board board;
     protected Players players;
 
@@ -13,13 +11,14 @@ public class Player
     private readonly Dictionary<ResourceType, int> resources;
     private readonly PointsVisual pointsVisual;
 
-    public Player(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players)
+    public Player(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players, Anthill anthill)
     {
         this.name = name;
         this.type = type;
         this.pointsVisual = pointsVisual;
         this.board = board;
         this.players = players;
+        this.anthill = anthill;
 
         pointsVisual.SetPlayerName(name);
 
@@ -30,10 +29,10 @@ public class Player
             { ResourceType.type3, 0 },
             { ResourceType.type4, 0 },
             { ResourceType.type5, 0 },
-            { ResourceType.egs, 0 },
-            { ResourceType.ants, 0 },
+            { ResourceType.eggs, 0 },
+            { ResourceType.ants, 1 },
             { ResourceType.tunnels, 0 },
-            { ResourceType.chambers, 0 }
+            { ResourceType.dens, 1 }
         };
         this.players = players;
     }
@@ -81,20 +80,22 @@ public class Player
 
         if (actionType == ActionType.LayEgg)
         {
-            resources[ResourceType.egs]++;
+            resources[ResourceType.eggs]++;
+            anthill.CreateEgg();
         }
         else if (actionType == ActionType.HatchAnt)
         {
-            resources[ResourceType.egs]--;
+            resources[ResourceType.eggs]--;
             resources[ResourceType.ants]++;
+            anthill.CreateAnt();
         }
         else if (actionType == ActionType.BuildTunnel)
         {
             resources[ResourceType.tunnels]++;
         }
-        else if (actionType == ActionType.BuildChamber)
+        else if (actionType == ActionType.BuildDen)
         {
-            resources[ResourceType.chambers]++;
+            resources[ResourceType.dens]++;
         }
 
         players.SetupButtons();

@@ -5,8 +5,8 @@ public enum ResourceType
     type3,
     type4,
     type5,
-    egs,
+    eggs,
     ants,
     tunnels,
-    chambers
+    dens
 }

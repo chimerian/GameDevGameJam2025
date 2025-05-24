@@ -3,6 +3,6 @@ public enum ActionType
     LayEgg,
     HatchAnt,
     BuildTunnel,
-    BuildChamber,
-    TransformChamber
+    BuildDen,
+    TransformDen
 }
