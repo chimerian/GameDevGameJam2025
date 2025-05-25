@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
     private Tile selectedTile;
     private Tile selectedTile2;
     private bool blockMode;
+    private bool endGame;
 
     private void Start()
     {
@@ -30,6 +31,10 @@ public class Board : MonoBehaviour
 
     public void SelectTile(Tile tile)
     {
+        if (endGame)
+        {
+            return;
+        }
         if (blockMode && players.CurrentPlayer.Type == PlayerType.Human)
         {
             return;
@@ -71,7 +76,12 @@ public class Board : MonoBehaviour
 
     public bool IsBlockedMode()
     {
-        return blockMode;
+        return blockMode || endGame;
+    }
+
+    public void SetEndGame()
+    {
+        endGame = true;
     }
 
     private void GenerateBoard()

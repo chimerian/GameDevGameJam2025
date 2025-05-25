@@ -4,6 +4,8 @@ using UnityEngine;
 public class TurnSystem : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI TurnNumberText;
+    [SerializeField] private GameObject EndGameGameObject;
+    [SerializeField] private TextMeshPro EndGameText;
 
     private int turnCount = 1;
 
@@ -30,6 +32,12 @@ public class TurnSystem : MonoBehaviour
     {
         turnCount++;
         UpdateTurnNumberText();
+    }
+
+    public void ShowEndGame(string name)
+    {
+        EndGameText.text = $"The winner is {name}!";
+        EndGameGameObject.SetActive(true);
     }
 
     private void UpdateTurnNumberText()

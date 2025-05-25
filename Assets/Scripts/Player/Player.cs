@@ -89,6 +89,12 @@ public class Player
         {
             resources[ResourceType.ants]++;
             anthill.CreateAnt();
+
+            if (resources[ResourceType.ants] == 50)
+            {
+                turnSystem.ShowEndGame(name);
+                board.SetEndGame();
+            }
         }
         else if (actionType == ActionType.BuildTunnel)
         {
