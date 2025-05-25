@@ -406,13 +406,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Border: {fileID: 0}
   playerNameText: {fileID: 7530398876364052147}
-  points1: {fileID: 4857237938632483143}
-  points2: {fileID: 5392547634172169509}
-  points3: {fileID: 4231771780983184921}
-  points4: {fileID: 5197244849698460272}
-  points5: {fileID: 6774572304385017730}
-  points6: {fileID: 6460668236237725492}
-  points7: {fileID: 6285737177340809257}
+  pointsText:
+  - {fileID: 4857237938632483143}
+  - {fileID: 5392547634172169509}
+  - {fileID: 4231771780983184921}
+  - {fileID: 5197244849698460272}
+  - {fileID: 6774572304385017730}
+  - {fileID: 6460668236237725492}
+  - {fileID: 6285737177340809257}
 --- !u!1001 &2511523585578709817
 PrefabInstance:
   m_ObjectHideFlags: 0

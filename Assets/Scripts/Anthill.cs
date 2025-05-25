@@ -10,12 +10,22 @@ public class Anthill : MonoBehaviour
 
     public void CreateEgg()
     {
+        if (players.CurrentPlayer.Type != PlayerType.Human)
+        {
+            return;
+        }
+
         AnthillDen den = GetRandomDen();
         den.CreateEgg();
     }
 
     public void CreateAnt()
     {
+        if (players.CurrentPlayer.Type != PlayerType.Human)
+        {
+            return;
+        }
+
         AnthillDen den = GetDenWithEgg();
         den.CreateAnt();
         den.DestroyEgg();

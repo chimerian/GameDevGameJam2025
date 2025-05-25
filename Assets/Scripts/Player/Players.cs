@@ -25,10 +25,10 @@ public class Players : MonoBehaviour
 
     private void Start()
     {
-        players.Add(new Player("PLAYER", PlayerType.Human, Player1Panel, board, this, anthill));
-        players.Add(new PlayerAI("CPU 1", PlayerType.AI_Easy, Player2Panel, board, this, anthill));
-        players.Add(new PlayerAI("CPU 2", PlayerType.AI_Easy, Player3Panel, board, this, anthill));
-        players.Add(new PlayerAI("CPU 3", PlayerType.AI_Easy, Player4Panel, board, this, anthill));
+        players.Add(new Player("PLAYER", PlayerType.Human, Player1Panel, board, this, anthill, turnSystem));
+        players.Add(new PlayerAI("CPU 1", PlayerType.AI_Easy, Player2Panel, board, this, anthill, turnSystem));
+        players.Add(new PlayerAI("CPU 2", PlayerType.AI_Easy, Player3Panel, board, this, anthill, turnSystem));
+        players.Add(new PlayerAI("CPU 3", PlayerType.AI_Easy, Player4Panel, board, this, anthill, turnSystem));
         currentPlayer = players[0];
         UpdateText();
         ShowPlayerTurnText();

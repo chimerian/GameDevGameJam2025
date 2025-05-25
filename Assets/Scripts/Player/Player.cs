@@ -5,13 +5,14 @@ public class Player
     protected Anthill anthill;
     protected Board board;
     protected Players players;
+    protected TurnSystem turnSystem;
 
-    private readonly string name;
-    private readonly PlayerType type;
-    private readonly Dictionary<ResourceType, int> resources;
-    private readonly PointsVisual pointsVisual;
+    protected readonly string name;
+    protected readonly PlayerType type;
+    protected readonly Dictionary<ResourceType, int> resources;
+    protected readonly PointsVisual pointsVisual;
 
-    public Player(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players, Anthill anthill)
+    public Player(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players, Anthill anthill, TurnSystem turnSystem)
     {
         this.name = name;
         this.type = type;
@@ -19,6 +20,7 @@ public class Player
         this.board = board;
         this.players = players;
         this.anthill = anthill;
+        this.turnSystem = turnSystem;
 
         pointsVisual.SetPlayerName(name);
 
@@ -97,7 +99,7 @@ public class Player
             resources[ResourceType.dens]++;
         }
 
-        for (int i = 0; i < costs.Count; i++)
+        for (int i = 0; i < 7; i++)
         {
             ResourceType tileType = (ResourceType)i;
             pointsVisual.SetPoints(tileType, resources[tileType]);
