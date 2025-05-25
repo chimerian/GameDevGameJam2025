@@ -23,7 +23,7 @@ public class AnthillDen : MonoBehaviour
 
         foreach (Transform child in antsPrefabsParent)
         {
-            //child.gameObject.SetActive(false);
+            child.gameObject.SetActive(false);
             antsPrefabs.Add(child.gameObject);
         }
     }
@@ -31,7 +31,7 @@ public class AnthillDen : MonoBehaviour
     public void CreateEgg()
     {
         int randomEggIndex = Random.Range(0, eggsPrefabs.Count);
-        GameObject egg = Instantiate(eggsPrefabs[randomEggIndex], eggsPrefabsParent);
+        GameObject egg = Instantiate(eggsPrefabs[randomEggIndex], eggsParent);
         egg.SetActive(true);
         eggs.Add(egg);
     }
@@ -39,7 +39,7 @@ public class AnthillDen : MonoBehaviour
     public void CreateAnt()
     {
         int randomAntIndex = Random.Range(0, antsPrefabs.Count);
-        GameObject ant = Instantiate(antsPrefabs[randomAntIndex], antsPrefabsParent);
+        GameObject ant = Instantiate(antsPrefabs[randomAntIndex], antsParent);
         ant.SetActive(true);
         //ant.transform.localScale = Vector3.one; // Reset scale to default
         ants.Add(ant);

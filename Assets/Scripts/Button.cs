@@ -1,9 +1,9 @@
 using Reflex.Attributes;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Button : MonoBehaviour
 {
@@ -24,6 +24,10 @@ public class Button : MonoBehaviour
     [SerializeField] private List<int> costs;
     [SerializeField] private List<TextMeshPro> textCost;
     [SerializeField] private List<SpriteRenderer> spriteIconCost;
+    [SerializeField] private TextMeshPro textIncome;
+    [SerializeField] private SpriteRenderer spriteIconIncome;
+    [SerializeField] private ResourceType resourceType;
+    [SerializeField] private int income;
 
     private bool isHovered = false;
     private Coroutine clickRoutine;
@@ -102,6 +106,9 @@ public class Button : MonoBehaviour
     {
         textName.text = actionName;
 
+        textIncome.text = $"+{income}";
+        spriteIconIncome.sprite = spriteIconPrefabs[(int)resourceType];
+
         int textNumber = 0;
 
         for (int i = 0; i < 8; i++)
@@ -111,7 +118,7 @@ public class Button : MonoBehaviour
                 continue;
             }
 
-            textCost[textNumber].text = costs[i].ToString();
+            textCost[textNumber].text = $"-{costs[i]}";
             spriteIconCost[textNumber].gameObject.transform.parent.gameObject.SetActive(true);
             spriteIconCost[textNumber].sprite = spriteIconPrefabs[i];
 

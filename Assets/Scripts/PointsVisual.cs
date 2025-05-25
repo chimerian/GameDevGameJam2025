@@ -10,6 +10,8 @@ public class PointsVisual : MonoBehaviour
     [SerializeField] private TextMeshPro points3;
     [SerializeField] private TextMeshPro points4;
     [SerializeField] private TextMeshPro points5;
+    [SerializeField] private TextMeshPro points6;
+    [SerializeField] private TextMeshPro points7;
 
     private void Start()
     {
@@ -44,16 +46,24 @@ public class PointsVisual : MonoBehaviour
             case ResourceType.type5:
                 points5.text = points.ToString();
                 break;
+
+            case ResourceType.eggs:
+                points6.text = points.ToString();
+                break;
+
+            case ResourceType.ants:
+                points7.text = points.ToString();
+                break;
         }
     }
 
     public void ShowBorder()
     {
-        Border.SetActive(true);
+        //Border.SetActive(true);
     }
 
     public void HideBorder()
     {
-        Border.SetActive(false);
+        //Border.SetActive(false);
     }
 }
