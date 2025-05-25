@@ -13,7 +13,7 @@ public class Ant : MonoBehaviour
     private int direction = 1;
     private bool facingRight = true;
 
-    void Update()
+    private void Update()
     {
         if (checkpoints == null || checkpoints.Count < 2)
             return;
@@ -54,5 +54,13 @@ public class Ant : MonoBehaviour
                 direction = 1;
             }
         }
+    }
+
+    public void SetupRandom()
+    {
+        float moveSpeed = Random.Range(0.8f, 1.2f);
+        float scale = Random.Range(0.19f, 0.31f);
+        this.moveSpeed = moveSpeed;
+        transform.localScale = new Vector3(-scale, scale, scale);
     }
 }

@@ -8,24 +8,37 @@ public class Anthill : MonoBehaviour
 
     [SerializeField] private List<AnthillDen> anthillDens = new();
 
-    public void CreateAnt()
-    {
-        AnthillDen den = GetDen();
-        den.CreateAnt();
-    }
-
     public void CreateEgg()
     {
-        AnthillDen den = GetDen();
+        AnthillDen den = GetRandomDen();
         den.CreateEgg();
     }
 
-    private AnthillDen GetDen()
+    public void CreateAnt()
+    {
+        AnthillDen den = GetDenWithEgg();
+        den.CreateAnt();
+        den.DestroyEgg();
+    }
+
+    private AnthillDen GetRandomDen()
     {
         int denCount = players.CurrentPlayer.GetPointsCount(ResourceType.dens);
-        Debug.Log($"Dens count: {denCount}");
         int randomDen = Random.Range(0, denCount);
-        Debug.Log($"Random den: {randomDen}");
         return anthillDens[randomDen];
+    }
+
+    private AnthillDen GetDenWithEgg()
+    {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        while (attempts < maxAttempts)
+        {
+            int randomIndex = Random.Range(0, anthillDens.Count);
+            if (anthillDens[randomIndex].HasEggs())
+                return anthillDens[randomIndex];
+            attempts++;
+        }
+        return null;
     }
 }

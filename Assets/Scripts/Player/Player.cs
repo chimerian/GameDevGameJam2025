@@ -85,8 +85,6 @@ public class Player
         }
         else if (actionType == ActionType.HatchAnt)
         {
-            //z jakiegoś powodu jajka są odejmowane dwa razy
-            resources[ResourceType.eggs]--;
             resources[ResourceType.ants]++;
             anthill.CreateAnt();
         }
@@ -97,6 +95,12 @@ public class Player
         else if (actionType == ActionType.BuildDen)
         {
             resources[ResourceType.dens]++;
+        }
+
+        for (int i = 0; i < costs.Count; i++)
+        {
+            ResourceType tileType = (ResourceType)i;
+            pointsVisual.SetPoints(tileType, resources[tileType]);
         }
 
         players.SetupButtons();

@@ -36,12 +36,31 @@ public class AnthillDen : MonoBehaviour
         eggs.Add(egg);
     }
 
+    internal void DestroyEgg()
+    {
+        if (eggs.Count <= 0)
+        {
+            return;
+        }
+
+        int randomEggIndex = Random.Range(0, eggs.Count);
+        GameObject eggToDestroy = eggs[randomEggIndex];
+        eggs.RemoveAt(randomEggIndex);
+        Destroy(eggToDestroy);
+    }
+
     public void CreateAnt()
     {
         int randomAntIndex = Random.Range(0, antsPrefabs.Count);
-        GameObject ant = Instantiate(antsPrefabs[randomAntIndex], antsParent);
-        ant.SetActive(true);
-        //ant.transform.localScale = Vector3.one; // Reset scale to default
-        ants.Add(ant);
+        GameObject antGameObject = Instantiate(antsPrefabs[randomAntIndex], antsParent);
+        Ant ant = antGameObject.GetComponent<Ant>();
+        ant.SetupRandom();
+        antGameObject.SetActive(true);
+        ants.Add(antGameObject);
+    }
+
+    public bool HasEggs()
+    {
+        return eggs.Count > 0;
     }
 }

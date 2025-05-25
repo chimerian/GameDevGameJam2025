@@ -4,10 +4,10 @@ Known errors
 
 TODO:
 - Menu scene with selection of number of AI opponents
-- Music
++ Music
 - Sounds
 + Tiny World
 - Tutorial
-- Graphics swap
++ Graphics swap
 - Explosion animations
 + AI movement animations
