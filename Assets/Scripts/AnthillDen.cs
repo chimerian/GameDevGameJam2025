@@ -41,6 +41,7 @@ public class AnthillDen : MonoBehaviour
         int randomAntIndex = Random.Range(0, antsPrefabs.Count);
         GameObject ant = Instantiate(antsPrefabs[randomAntIndex], antsPrefabsParent);
         ant.SetActive(true);
+        //ant.transform.localScale = Vector3.one; // Reset scale to default
         ants.Add(ant);
     }
 }

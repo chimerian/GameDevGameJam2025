@@ -23,7 +23,9 @@ public class Anthill : MonoBehaviour
     private AnthillDen GetDen()
     {
         int denCount = players.CurrentPlayer.GetPointsCount(ResourceType.dens);
+        Debug.Log($"Dens count: {denCount}");
         int randomDen = Random.Range(0, denCount);
+        Debug.Log($"Random den: {randomDen}");
         return anthillDens[randomDen];
     }
 }

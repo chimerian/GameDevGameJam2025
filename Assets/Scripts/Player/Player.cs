@@ -85,6 +85,7 @@ public class Player
         }
         else if (actionType == ActionType.HatchAnt)
         {
+            //z jakiegoś powodu jajka są odejmowane dwa razy
             resources[ResourceType.eggs]--;
             resources[ResourceType.ants]++;
             anthill.CreateAnt();
