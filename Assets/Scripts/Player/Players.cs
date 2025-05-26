@@ -13,6 +13,7 @@ public class Players : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PlayerText;
     [SerializeField] private TextMeshPro PlayerTurnText;
     [SerializeField] private Animator PlayerTurnAnimator;
+    [SerializeField] private GameObject WaitingObject;
     [SerializeField] private PointsVisual Player1Panel;
     [SerializeField] private PointsVisual Player2Panel;
     [SerializeField] private PointsVisual Player3Panel;
@@ -112,5 +113,14 @@ public class Players : MonoBehaviour
     {
         PlayerTurnAnimator.SetTrigger("StartAnimation");
         PlayerTurnText.text = $"{currentPlayer.Name} turn";
+
+        if (currentPlayer.Type == PlayerType.Human)
+        {
+            WaitingObject.SetActive(false);
+        }
+        else
+        {
+            WaitingObject.SetActive(true);
+        }
     }
 }
