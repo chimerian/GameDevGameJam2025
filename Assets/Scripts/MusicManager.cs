@@ -12,6 +12,7 @@ public class MusicManager : MonoBehaviour
     private AudioSource audioSource;
     private int lastTrackIndex = -1;
     private Coroutine fadeCoroutine;
+    private Coroutine autoFadeOutCoroutine;
 
     private void Awake()
     {
@@ -44,6 +45,12 @@ public class MusicManager : MonoBehaviour
         audioSource.Play();
 
         StartFade(volume);
+
+        if (autoFadeOutCoroutine != null)
+        {
+            StopCoroutine(autoFadeOutCoroutine);
+        }
+        autoFadeOutCoroutine = StartCoroutine(WaitToFadeOut(nextClip.length, fadeDuration));
     }
 
     private int GetRandomTrackIndex()
@@ -98,6 +105,11 @@ public class MusicManager : MonoBehaviour
 
     public void StopMusicWithFade()
     {
+        if (!audioSource.isPlaying)
+        {
+            return;
+        }
+
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
 
@@ -118,5 +130,12 @@ public class MusicManager : MonoBehaviour
 
         audioSource.Stop();
         audioSource.volume = 0f;
+    }
+
+    private IEnumerator WaitToFadeOut(float clipLength, float fadeDuration)
+    {
+        float waitTime = Mathf.Max(0f, clipLength - fadeDuration);
+        yield return new WaitForSeconds(waitTime);
+        StopMusicWithFade();
     }
 }
