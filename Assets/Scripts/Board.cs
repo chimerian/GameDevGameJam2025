@@ -15,6 +15,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int tileTypeCount = 5;
     [SerializeField] private float tileSize = 1;
     [SerializeField] private GameObject[] tilePrefabs;
+    [SerializeField] private RandomSoundPlayer soundPlayer;
 
     private TileData[,] tiles;
     private List<TileSolution> solutions;
@@ -356,6 +357,8 @@ public class Board : MonoBehaviour
 
         do
         {
+            soundPlayer.PlayRandomSound();
+
             foreach (TileSolution solution in solutions)
             {
                 Vector2Int position = solution.Position1;
