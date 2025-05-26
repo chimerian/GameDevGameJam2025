@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: e87b4f2051dda5f4fa8264f4f3788019
+guid: a56d0375d8ae973489b4491dcd8e7822
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5272401415994956661
-    second: 32_0
+      213: 3024660110536899920
+    second: SmallAnt_0
+  - first:
+      213: 5284843328111844690
+    second: SmallAnt_1
+  - first:
+      213: -4286143827957346139
+    second: SmallAnt_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 2
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +81,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 32_0
+      name: SmallAnt_0
       rect:
         serializedVersion: 2
-        x: 35
-        y: 38
-        width: 186
-        height: 180
+        x: 2
+        y: 2
+        width: 86
+        height: 44
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 57b55a947255b2940800000000000000
-      internalID: 5272401415994956661
+      spriteID: 05d78de5850c9f920800000000000000
+      internalID: 3024660110536899920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallAnt_1
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 2
+        width: 86
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25d13b1b109875940800000000000000
+      internalID: 5284843328111844690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallAnt_2
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 2
+        width: 86
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a09e5eb5ee8484c0800000000000000
+      internalID: -4286143827957346139
       vertices: []
       indices: 
       edges: []
@@ -135,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      32_0: 5272401415994956661
+      SmallAnt_0: 3024660110536899920
+      SmallAnt_1: 5284843328111844690
+      SmallAnt_2: -4286143827957346139
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

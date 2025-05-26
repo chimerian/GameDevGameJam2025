@@ -5,13 +5,16 @@ public class AnthillDen : MonoBehaviour
 {
     [SerializeField] private Transform eggsPrefabsParent;
     [SerializeField] private Transform antsPrefabsParent;
+    [SerializeField] private GameObject smallAntPrefabs;
     [SerializeField] private Transform eggsParent;
+    [SerializeField] private Transform smallAntsParent;
     [SerializeField] private Transform antsParent;
 
     private List<GameObject> eggsPrefabs = new();
     private List<GameObject> antsPrefabs = new();
     private List<GameObject> eggs = new();
     private List<GameObject> ants = new();
+    private List<GameObject> smallAnts = new();
 
     private void Start()
     {
@@ -36,24 +39,33 @@ public class AnthillDen : MonoBehaviour
         eggs.Add(egg);
     }
 
-    internal void DestroyEgg()
+    public void CreateSmallAnt()
     {
-        if (eggs.Count <= 0)
-        {
-            return;
-        }
-
         int randomEggIndex = Random.Range(0, eggs.Count);
         GameObject eggToDestroy = eggs[randomEggIndex];
+        Vector3 eggPosition = eggToDestroy.transform.position;
         eggs.RemoveAt(randomEggIndex);
         Destroy(eggToDestroy);
+
+        GameObject smallAntGameObject = Instantiate(smallAntPrefabs, antsParent);
+        smallAntGameObject.transform.position = eggPosition;
+        smallAnts.Add(smallAntGameObject);
+
+        return;
     }
 
     public void CreateAnt()
     {
+        int randomSmallAntIndex = Random.Range(0, smallAnts.Count);
+        GameObject smallAntToDestroy = smallAnts[randomSmallAntIndex];
+        Vector3 smallAntPosition = smallAntToDestroy.transform.position;
+        smallAnts.RemoveAt(randomSmallAntIndex);
+        Destroy(smallAntToDestroy);
+
         int randomAntIndex = Random.Range(0, antsPrefabs.Count);
         GameObject antGameObject = Instantiate(antsPrefabs[randomAntIndex], antsParent);
         Ant ant = antGameObject.GetComponent<Ant>();
+        antGameObject.transform.position = smallAntPosition;
         ant.SetupRandom();
         antGameObject.SetActive(true);
         ants.Add(antGameObject);
@@ -62,5 +74,10 @@ public class AnthillDen : MonoBehaviour
     public bool HasEggs()
     {
         return eggs.Count > 0;
+    }
+
+    public bool HasSmallAnt()
+    {
+        return smallAnts.Count > 0;
     }
 }

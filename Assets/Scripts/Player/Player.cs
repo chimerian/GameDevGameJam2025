@@ -12,6 +12,8 @@ public class Player
     protected readonly Dictionary<ResourceType, int> resources;
     protected readonly PointsVisual pointsVisual;
 
+    private readonly int pointsToWin = 30;
+
     public Player(string name, PlayerType type, PointsVisual pointsVisual, Board board, Players players, Anthill anthill, TurnSystem turnSystem)
     {
         this.name = name;
@@ -32,9 +34,10 @@ public class Player
             { ResourceType.type4, 0 },
             { ResourceType.type5, 0 },
             { ResourceType.eggs, 0 },
+            { ResourceType.smallAnt, 0 },
             { ResourceType.ants, 1 },
-            { ResourceType.tunnels, 0 },
-            { ResourceType.dens, 1 }
+            { ResourceType.tunnels, 7 },
+            { ResourceType.dens, 7 }
         };
         this.players = players;
     }
@@ -80,32 +83,29 @@ public class Player
             }
         }
 
-        if (actionType == ActionType.LayEgg)
+        if (actionType == ActionType.EggLaying)
         {
             resources[ResourceType.eggs]++;
             anthill.CreateEgg();
         }
-        else if (actionType == ActionType.HatchAnt)
+        else if (actionType == ActionType.HatchingEgg)
+        {
+            resources[ResourceType.smallAnt]++;
+            anthill.CreateSmallAnt();
+        }
+        else if (actionType == ActionType.AntTransformation)
         {
             resources[ResourceType.ants]++;
             anthill.CreateAnt();
 
-            if (resources[ResourceType.ants] == 50)
+            if (resources[ResourceType.ants] == pointsToWin)
             {
                 turnSystem.ShowEndGame(name);
                 board.SetEndGame();
             }
         }
-        else if (actionType == ActionType.BuildTunnel)
-        {
-            resources[ResourceType.tunnels]++;
-        }
-        else if (actionType == ActionType.BuildDen)
-        {
-            resources[ResourceType.dens]++;
-        }
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 8; i++)
         {
             ResourceType tileType = (ResourceType)i;
             pointsVisual.SetPoints(tileType, resources[tileType]);

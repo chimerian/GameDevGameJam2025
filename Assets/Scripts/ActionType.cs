@@ -1,8 +1,6 @@
 public enum ActionType
 {
-    LayEgg,
-    HatchAnt,
-    BuildTunnel,
-    BuildDen,
-    TransformDen
+    EggLaying,
+    HatchingEgg,
+    AntTransformation
 }

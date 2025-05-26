@@ -55,19 +55,27 @@ public class Players : MonoBehaviour
         StartCoroutine(StartNewPlayerMove());
     }
 
-    public void SetupButtons()
+    public void DisableButtons()
     {
         foreach (Button button in ActionButtons)
         {
             button.SetEnabled(false);
+        }
+    }
 
-            if (currentPlayer.Type != PlayerType.Human)
-            {
-                break;
-            }
+    public void SetupButtons()
+    {
+        DisableButtons();
 
+        if (currentPlayer.Type != PlayerType.Human)
+        {
+            return;
+        }
+
+        foreach (Button button in ActionButtons)
+        {
             bool hasEnoughtResources = true;
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 8; i++)
             {
                 if (button.GetCost(i) > currentPlayer.GetPointsCount((ResourceType)i))
                 {

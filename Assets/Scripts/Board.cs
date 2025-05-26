@@ -313,6 +313,8 @@ public class Board : MonoBehaviour
             selectedTile2.StartSwapAnimation(directionSelectedTile2);
             selectedTile2 = null;
         }
+
+        players.DisableButtons();
     }
 
     private void SwapSelectedTiles(TileData selectedTileData, TileData selectedTileData2)

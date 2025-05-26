@@ -19,7 +19,7 @@ public class Anthill : MonoBehaviour
         den.CreateEgg();
     }
 
-    public void CreateAnt()
+    public void CreateSmallAnt()
     {
         if (players.CurrentPlayer.Type != PlayerType.Human)
         {
@@ -27,8 +27,18 @@ public class Anthill : MonoBehaviour
         }
 
         AnthillDen den = GetDenWithEgg();
+        den.CreateSmallAnt();
+    }
+
+    public void CreateAnt()
+    {
+        if (players.CurrentPlayer.Type != PlayerType.Human)
+        {
+            return;
+        }
+
+        AnthillDen den = GetDenWithSmallAnt();
         den.CreateAnt();
-        den.DestroyEgg();
     }
 
     private AnthillDen GetRandomDen()
@@ -46,6 +56,20 @@ public class Anthill : MonoBehaviour
         {
             int randomIndex = Random.Range(0, anthillDens.Count);
             if (anthillDens[randomIndex].HasEggs())
+                return anthillDens[randomIndex];
+            attempts++;
+        }
+        return null;
+    }
+
+    private AnthillDen GetDenWithSmallAnt()
+    {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        while (attempts < maxAttempts)
+        {
+            int randomIndex = Random.Range(0, anthillDens.Count);
+            if (anthillDens[randomIndex].HasSmallAnt())
                 return anthillDens[randomIndex];
             attempts++;
         }
