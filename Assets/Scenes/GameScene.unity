@@ -2945,7 +2945,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 50779065801652405, guid: 956c89c8615e08c449d043410a1aac44, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -8642,7 +8642,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 50779065801652405, guid: d3bf2c0046b5e2c4480346900ace6429, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -17272,7 +17272,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 697121e386b02404281de5d5fb60a486, type: 3}
   - {fileID: 8300000, guid: 4365eef78c28df24c98791b02604d9e2, type: 3}
   fadeDuration: 2
-  volume: 0.5
+  volume: 0.6
 --- !u!4 &1322184670
 Transform:
   m_ObjectHideFlags: 0

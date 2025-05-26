@@ -40,6 +40,8 @@ public class Player
             { ResourceType.dens, 7 }
         };
         this.players = players;
+
+        UpdateResourcesText();
     }
 
     public string Name => name;
@@ -105,12 +107,17 @@ public class Player
             }
         }
 
+        UpdateResourcesText();
+
+        players.SetupButtons();
+    }
+
+    private void UpdateResourcesText()
+    {
         for (int i = 0; i < 8; i++)
         {
             ResourceType tileType = (ResourceType)i;
             pointsVisual.SetPoints(tileType, resources[tileType]);
         }
-
-        players.SetupButtons();
     }
 }
