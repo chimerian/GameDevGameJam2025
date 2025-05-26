@@ -100,16 +100,19 @@ public class Board : MonoBehaviour
                 }
                 while (IsNotCorrect(x, y, tileType));
 
-                CreateTile(x, y, tileType);
+                CreateTile(x, y, tileType, false);
             }
         }
     }
 
-    private void CreateTile(int x, int y, ResourceType tileType)
+    private void CreateTile(int x, int y, ResourceType tileType, bool skipAnimation)
     {
         Vector2 localPos = new(-width * tileSize / 2 + x * tileSize, height * tileSize / 2 - (y + 1) * tileSize);
         GameObject tileGameObject = Instantiate(tilePrefabs[(int)tileType], transform);
         tileGameObject.transform.localPosition = localPos;
+
+        Animator animator = tileGameObject.GetComponent<Animator>();
+        animator.SetBool("PlayCreateAnimation", !skipAnimation);
 
         Tile tile = tileGameObject.GetComponent<Tile>();
         Vector2Int position = new(x, y);
@@ -342,11 +345,11 @@ public class Board : MonoBehaviour
         TileData selectedTileData2 = selectedTile2.GetTileData();
 
         selectedTile.Destroy();
-        CreateTile(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData.TileType);
+        CreateTile(selectedTileData.Position.x, selectedTileData.Position.y, selectedTileData.TileType, true);
         selectedTile = null;
 
         selectedTile2.Destroy();
-        CreateTile(selectedTileData2.Position.x, selectedTileData2.Position.y, selectedTileData2.TileType);
+        CreateTile(selectedTileData2.Position.x, selectedTileData2.Position.y, selectedTileData2.TileType, true);
         selectedTile2 = null;
 
         GetSolutions(false);
@@ -394,7 +397,7 @@ public class Board : MonoBehaviour
                 }
 
                 ResourceType tileType = (ResourceType)Random.Range(0, tileTypeCount);
-                CreateTile(x, y, tileType);
+                CreateTile(x, y, tileType, false);
             }
         }
     }
